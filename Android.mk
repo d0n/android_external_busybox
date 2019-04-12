@@ -2,19 +2,19 @@ LOCAL_CLANG_EXCEPTION_PROJECTS += external/busybox
 LOCAL_CLANG_EXCEPTION_PROJECTS += external/busybox/android/librpc
 LOCAL_PATH := $(call my-dir)
 BB_PATH := $(LOCAL_PATH)
+HAVE_DPRINTF := true
 
 # Bionic Branches Switches (GB/ICS/L)
 BIONIC_ICS := false
 BIONIC_L := true
 
-BUSYBOX_WARNING_HIDE := -Wno-error=implicit-function-declaration -Wno-implicit-function-declaration -Wno-implicit-fallthrough \
-			-Wno-sign-compare -Wno-format-overflow -Wno-shift-negative-value -Wno-logical-not-parentheses -Wno-return-type
+BUSYBOX_WARNING_HIDE := -Wno-error=implicit-function-declaration -Wno-implicit-function-declaration -Wno-implicit-fallthrough -Wno-sign-compare -Wno-shift-overflow -Wno-shift-negative-value -Wno-logical-not-parentheses -Wno-return-type -Wno-unused-local-typedef -Wno-string-plus-int -Wno-non-literal-null-conversion -Wno-incompatible-pointer-types
 
 # Make a static library for regex.
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := android/regex/bb_regex.c
 LOCAL_C_INCLUDES := $(BB_PATH)/android/regex
-LOCAL_CFLAGS := -Wno-sign-compare
+LOCAL_CFLAGS := -Wno-sign-compare -Wno-unused-variable -Wno-unused-parameter
 LOCAL_MODULE := libclearsilverregex
 include $(BUILD_STATIC_LIBRARY)
 
@@ -23,7 +23,7 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(shell cat $(BB_PATH)/android/librpc.sources)
 LOCAL_C_INCLUDES := $(BB_PATH)/android/librpc
 LOCAL_MODULE := libuclibcrpc
-LOCAL_CFLAGS += -fno-strict-aliasing $(BUSYBOX_WARNING_HIDE)
+LOCAL_CFLAGS += -fno-strict-aliasing -Wno-error=maybe-uninitialized
 LOCAL_CLANG := false
 ifeq ($(BIONIC_L),true)
 LOCAL_CFLAGS += -DBIONIC_ICS -DBIONIC_L
@@ -110,6 +110,7 @@ BUSYBOX_CFLAGS = \
 	-DANDROID \
 	-fno-strict-aliasing \
 	-fno-builtin-stpcpy \
+    -Wno-unused-function \
 	$(BUSYBOX_WARNING_HIDE) \
 	-include $(bb_gen)/$(BUSYBOX_CONFIG)/include/autoconf.h \
 	-D'CONFIG_DEFAULT_MODULES_DIR="$(KERNEL_MODULES_DIR)"' \

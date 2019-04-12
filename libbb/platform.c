@@ -44,8 +44,8 @@ int FAST_FUNC vasprintf(char **string_ptr, const char *format, va_list p)
 }
 #endif
 
-#ifndef HAVE_DPRINTF
-/* dprintf is now part of POSIX.1, but was only added in 2008 */
+//#ifndef HAVE_DPRINTF
+/* dprintf is now part of POSIX.1, but was only added in 2008 
 int dprintf(int fd, const char *format, ...)
 {
 	va_list p;
@@ -61,7 +61,7 @@ int dprintf(int fd, const char *format, ...)
 	}
 	return r;
 }
-#endif
+#endif*/
 
 #ifndef HAVE_MEMRCHR
 /* Copyright (C) 2005 Free Software Foundation, Inc.
